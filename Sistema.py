@@ -34,7 +34,8 @@ def menu():
         "\n4 - Filtrar por categoria"
         "\n5 - Filtrar por data"
         "\n6 - Editar movimentação"
-        "\n7 - Sair\n"
+        "\n7 - Remover movimentação"
+        "\n8 - Sair\n"
     )
 
 def validacaoTipo(texto):
@@ -177,8 +178,11 @@ while True:
 
     elif opcao == "6":
         editar()
-        
+
     elif opcao == "7":
+        remover()
+
+    elif opcao == "8":
 
         print("Encerrando o programa...")
 
