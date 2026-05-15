@@ -81,6 +81,12 @@ def filtrarCategoria():
             
     if encontrar == False:
         print("Categoria não encontrada!")
+
+import datatime
+def escolherData():
+    data = datatime.datatime.now()
+    dataFormatada = data.strftime("%d/%m/%Y")
+    return dataFormatada
             
 def filtrarData():
     encontrar = False
@@ -145,7 +151,7 @@ while True:
         
         tipo = validacaoTipo("Tipo (entrada/saida): ")
 
-        data = entrada("Qual a data da movimentação: ")
+        data = dataFormatada()
 
         categoria = entrada ("Digite a categoria: ")
         
