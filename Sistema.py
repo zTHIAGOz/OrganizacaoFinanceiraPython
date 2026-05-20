@@ -82,9 +82,11 @@ def filtrarCategoria():
     if encontrar == False:
         print("Categoria não encontrada!")
 
-import datatime
+import datetime
+import json
+
 def escolherData():
-    data = datatime.datatime.now()
+    data = datetime.datetime.now()
     dataFormatada = data.strftime("%d/%m/%Y")
     return dataFormatada
             
@@ -130,10 +132,19 @@ def remover ():
     if encontrar == False:
         print("Movimentação não encontrada")
 
+def salvarJson():
+    listaJson = []
+    for u in lista:
+        listaJson.append(u.conversao())
+    with open ("dados.json","w") as arquivo:
+        json.dump(
+            listaJson,
+            arquivo,
+            inednt = 4)
 
 
 lista = []
-
+novaLista = []
 
 
 while True:
@@ -151,7 +162,7 @@ while True:
         
         tipo = validacaoTipo("Tipo (entrada/saida): ")
 
-        data = dataFormatada()
+        data = escolherData()
 
         categoria = entrada ("Digite a categoria: ")
         
