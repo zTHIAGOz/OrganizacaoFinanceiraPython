@@ -142,7 +142,21 @@ def salvarJson():
             arquivo,
             inednt = 4)
 
-
+def carrefarJson():
+    try:
+        with open ("dados.json", "r") as arquivo:
+            dados = json.dados:
+            for item in dados:
+                u = Objetos(
+                    item ["nome"],
+                    item ["valor"],
+                    item ["tipo"],
+                    item ["data"],
+                    item ["categoria"],)
+                lista.append(u)
+    except FileMotFoundError:
+        pass
+                
 lista = []
 novaLista = []
 
@@ -171,7 +185,7 @@ while True:
         lista.append(u)
 
         print("Movimentação cadastrada com sucesso!")
-
+        salvarJson()
     
     elif opcao == "2":
 
@@ -195,9 +209,11 @@ while True:
 
     elif opcao == "6":
         editar()
+        salvarJson()
 
     elif opcao == "7":
         remover()
+        salvarJson()
 
     elif opcao == "8":
 
