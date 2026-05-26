@@ -1,32 +1,36 @@
 class Objetos:
-
+    
     def __init__(self, nome, valor, tipo, data, categoria):
-
         self.nome = nome
         self.valor = valor
         self.tipo = tipo
         self.data = data
         self.categoria = categoria
-
+    
     def mostrar_resultado(self):    
-
-        
+        valorFormatado = f"{self.valor:.2f}".replace(".",",")
         if self.tipo.lower() == "entrada":
-
-            print(f"{self.nome} - +R${self.valor} - {self.data} - {self.categoria}")
-
+            print(f"{self.nome} - +R${valorFormatado} - {self.data} - {self.categoria}")
         elif self.tipo.lower() == "saida":
-
-            print(f"{self.nome} - -R${self.valor} - {self.data} - {self.categoria}")
-
+            print(f"{self.nome} - -R${valorFormatado} - {self.data} - {self.categoria}")
         else:
+            print(f"{self.nome} - R${valorFormatado} - {self.data} - {self.categoria}")
 
-            print(f"{self.nome} - R${self.valor} - {self.data} - {self.categoria}")
+    def conversao(self):
+        return{
+            "nome" : self.nome,
+            "valor" : self.valor,
+            "tipo" : self.tipo,
+            "data" : self.data,
+            "categoria" : self.categoria
+        }
 
-
-
+def cabecalho():
+    print("="*22)
+    print(" CONTROLE FINANCEIRO ")
+    print("="*22)
+    
 def menu():
-
     print(
         "\n1 - Adicionar movimentação"
         "\n2 - Listar movimentações"
@@ -45,23 +49,29 @@ def validacaoTipo(texto):
             valorTipo = input("Digite entrada/saida para a movimentação: " )
     return valorTipo
 
+def adicionar():
+    nome = entrada("Nome da movimentação: ")
+    valor = float(entrada("Valor da movimentação: "))
+    tipo = validacaoTipo("Tipo (entrada/saida): ")
+    data = escolherData()
+    categoria = entrada("Digite a categoria: ")
+    u = Objetos(nome, valor, tipo, data, categoria)
+    lista.append(u)
+    print("Movimentação cadastrada com sucesso!")
+    salvarJson()
 
-
-
-def mostrar_saldo():
-
-    saldo_total = 0
-
+def listar():
+    print("\n Movimentações cadastradas: \n")
     for u in lista:
-
+        u.mostrarResultados()
+        
+def mostrar_saldo():
+    saldo_total = 0
+    for u in lista:
         if u.tipo.lower() == "entrada":
-
             saldo_total += u.valor
-
         elif u.tipo.lower() == "saida":
-
             saldo_total -= u.valor
-
     print(f"\nSaldo atual: R${saldo_total}")
 
 def entrada(texto):
@@ -117,6 +127,7 @@ def editar():
             u.categoria = novaCategoria
             encontrar = True
             print("Editada com sucesso!")
+            salvarJson()
     if encontrar == False:
         print("Movimentação não encontrada!")
 
@@ -127,6 +138,7 @@ def remover ():
         if removendo.lower() == u.nome.lower():
             lista.remove(u)
             print("Movimentação removida com sucesso!")
+            salvarJson()
             encontrar = True
             break
     if encontrar == False:
@@ -152,54 +164,30 @@ def carrefarJson():
                     item ["valor"],
                     item ["tipo"],
                     item ["data"],
-                    item ["categoria"],)
+                    item ["categoria"]
+                )
                 lista.append(u)
-    except FileMotFoundError:
+    except FileNotFoundError:
         pass
                 
 lista = []
-novaLista = []
+carregarJSon()
 
 
 while True:
 
+    cabecalho()
+
     menu()
-
     opcao = input("Escolha uma opção: ")
-
-    
     if opcao == "1":
-
-        nome = entrada("Nome da movimentação: ")
+      adicionar()
         
-        valor = float(entrada("Valor da movimentação: "))
-        
-        tipo = validacaoTipo("Tipo (entrada/saida): ")
-
-        data = escolherData()
-
-        categoria = entrada ("Digite a categoria: ")
-        
-        u = Objetos(nome, valor, tipo, data, categoria)
-
-        lista.append(u)
-
-        print("Movimentação cadastrada com sucesso!")
-        salvarJson()
-    
     elif opcao == "2":
-
-        print("\nMovimentações cadastradas:\n")
-
-        for u in lista:
-
-            u.mostrar_resultado()
-
-    
+        listar()
+        
     elif opcao == "3":
-
         mostrar_saldo()
-
     
     elif opcao == "4":
         filtrarCategoria()
@@ -209,18 +197,14 @@ while True:
 
     elif opcao == "6":
         editar()
-        salvarJson()
+       
 
     elif opcao == "7":
         remover()
-        salvarJson()
 
     elif opcao == "8":
-
         print("Encerrando o programa...")
-
         break
 
     else:
-
         print("Opção inválida!")
