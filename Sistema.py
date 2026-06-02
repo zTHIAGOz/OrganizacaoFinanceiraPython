@@ -169,6 +169,35 @@ def carrefarJson():
                 lista.append(u)
     except FileNotFoundError:
         pass
+        
+ def mostrarRelatório():
+    entradaTotal = 0
+    saidaTotal = 0
+    maiorEntrada = None
+    for u in lista:
+        if u.tipo.lower() == "entrada":
+            entradaTotal += u.valor
+            if maiorEntrada == None:
+                maiorEntrada = u
+            elif u.valor > maiorEntrada.valor:
+                maiorEntrada = u
+        elif u.tipo.lower() == "saida":
+            saidaTotal += u.valor 
+    saldoFinal = entradaTotal  - saidaTotal
+    entradaFormatada = f"{entradaTotal:.2f}".replace(".", ",")
+    saidaFormatada = f"{saidaTotal:.2f}".replace(".", ",")
+    saldoFormatado = f"{saldoFinal:.2f}".replace(".", ",")
+    if maiorEntrada is not None:
+        maiorEntradaFormatada = f"{maiorEntrada.valor:.2f}".replace(".",",")
+        maiorEntradaValidacao = f"{maiorEntrada.nome} - R${maiorEntradaFormatada}"
+    else: maiorEntradaValidacao = "nenhuma entrada cadastrada"
+    print("=" * 15)
+    print(" RELATÓRIO ")
+    print("=" * 15)
+    print (f"Entradas: R${entradaFormatada} \n"
+           f"Saídas:  R${saidaFormatada} \n" 
+           f"Saldo final: R${saldoFormatado}\n"
+           f"Maior entrada:{maiorEntradaValidacao}\n")      
                 
 lista = []
 carregarJSon()
