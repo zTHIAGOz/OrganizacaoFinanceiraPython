@@ -176,20 +176,21 @@ def carrefarJson():
     maiorEntrada = None
     maiorSaida = None
     gastosCategoria = {}
-    EntradasCategoria = {}
-     
+    entradasCategoria = {}
+    
+
     for u in lista:
         if u.tipo.lower() == "entrada":
             entradaTotal += u.valor
-            if maiorEntrada == None:
-                maiorEntrada = u    
+            if maiorEntrada is None:
+                maiorEntrada = u
             elif u.valor > maiorEntrada.valor:
                 maiorEntrada = u
             if u.categoria not in entradasCategoria:
                 entradasCategoria[u.categoria] = u.valor
             else: entradasCategoria[u.categoria] += u.valor
         elif u.tipo.lower() == "saida":
-            saidaTotal += u.valor
+            saidaTotal += u.valor 
             if maiorSaida is None:
                 maiorSaida = u
             elif u.valor > maiorSaida.valor:
@@ -197,7 +198,29 @@ def carrefarJson():
             if u.categoria not in gastosCategoria:
                 gastosCategoria[u.categoria] = u.valor
             else:gastosCategoria[u.categoria] += u.valor
-                
+
+    maiorCategoriaGasto = None
+
+    for categoria in gastosCategoria:
+        if maiorCategoriaGasto is None:
+            maiorCategoriaGasto = categoria
+        elif gastosCategoria[categoria] > gastosCategoria[maiorCategoriaGasto]:
+            maiorCategoriaGasto = categoria 
+    if maiorCategoriaGasto is not None:
+        valorMaiorCategoriaGasto = gastosCategoria[maiorCategoriaGasto]
+        valorMaiorCategoriaFormatadoGasto = f"{valorMaiorCategoriaGasto:.2f}".replace("." , ",")
+
+    maiorCategoriaEntrada = None
+
+    for categoria in entradasCategoria:
+        if maiorCategoriaEntrada is None:
+            maiorCategoriaEntrada = categoria
+        elif entradasCategoria [categoria] > entradasCategoria[maiorCategoriaEntrada]:
+            maiorCategoriaEntrada = categoria
+    if maiorCategoriaEntrada is not None: 
+        valorMaiorCategoriaEntrada = entradasCategoria[maiorCategoriaEntrada]
+        valorMaiorCategoriaFormatadoEntrada = f"{valorMaiorCategoriaEntrada:.2f}".replace(".",",")
+
     saldoFinal = entradaTotal  - saidaTotal
     entradaFormatada = f"{entradaTotal:.2f}".replace(".", ",")
     saidaFormatada = f"{saidaTotal:.2f}".replace(".", ",")
@@ -210,6 +233,12 @@ def carrefarJson():
         maiorSaidaFormatada = f"{maiorSaida.valor:.2f}".replace(".", ",")
         maiorSaidaValidacao = f"{maiorSaida.nome} - R${maiorSaidaFormatada}"
     else: maiorSaidaValidacao = "nenhuma saída cadastrada"
+    if maiorCategoriaGasto is not None:
+        categoriaMaiorGasto = f"{maiorCategoriaGasto} - R${valorMaiorCategoriaFormatadoGasto}"
+    else: categoriaMaiorGasto = "Nenhum gasto cadastrado"
+    if maiorCategoriaEntrada is not None:
+        categoriaMaiorEntrada = f"{maiorCategoriaEntrada} - R${valorMaiorCategoriaFormatadoEntrada}"
+    else: categoriaMaiorEntrada = "Nenhum entrada cadastrada"
 
     print("=" * 15)
     print(" RELATÓRIO ")
@@ -217,7 +246,7 @@ def carrefarJson():
     print (f"Entradas: R${entradaFormatada} \n"
            f"Saídas:  R${saidaFormatada} \n" 
            f"Saldo final: R${saldoFormatado}\n"
-           f"Maior entrada:{maiorEntradaValidacao}\n"
+           f"Maior entrada: {maiorEntradaValidacao}\n"
            f"Maior saída: {maiorSaidaValidacao}\n")
     print("=" *20)
     print("Gastos por Categoria")
@@ -231,6 +260,11 @@ def carrefarJson():
     for categoria in entradasCategoria:
         valorFormatadoEntradas = f"{entradasCategoria[categoria]:.2f}".replace(".",",")
         print(f"{categoria}: R${valorFormatadoEntradas}")
+    print("=" *15)
+    print("Resumo Categorias")
+    print("="*15)    
+    print(f"Categoria com maior gasto: {categoriaMaiorGasto}")
+    print (f"Categoria com maior entrada: {categoriaMaiorEntrada}")
                 
 lista = []
 carregarJSon()
