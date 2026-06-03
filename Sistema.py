@@ -174,15 +174,30 @@ def carrefarJson():
     entradaTotal = 0
     saidaTotal = 0
     maiorEntrada = None
+    maiorSaida = None
+    gastosCategoria = {}
+    EntradasCategoria = {}
+     
     for u in lista:
         if u.tipo.lower() == "entrada":
             entradaTotal += u.valor
             if maiorEntrada == None:
-                maiorEntrada = u
+                maiorEntrada = u    
             elif u.valor > maiorEntrada.valor:
                 maiorEntrada = u
+            if u.categoria not in entradasCategoria:
+                entradasCategoria[u.categoria] = u.valor
+            else: entradasCategoria[u.categoria] += u.valor
         elif u.tipo.lower() == "saida":
-            saidaTotal += u.valor 
+            saidaTotal += u.valor
+            if maiorSaida is None:
+                maiorSaida = u
+            elif u.valor > maiorSaida.valor:
+                maiorSaida = u
+            if u.categoria not in gastosCategoria:
+                gastosCategoria[u.categoria] = u.valor
+            else:gastosCategoria[u.categoria] += u.valor
+                
     saldoFinal = entradaTotal  - saidaTotal
     entradaFormatada = f"{entradaTotal:.2f}".replace(".", ",")
     saidaFormatada = f"{saidaTotal:.2f}".replace(".", ",")
@@ -191,13 +206,31 @@ def carrefarJson():
         maiorEntradaFormatada = f"{maiorEntrada.valor:.2f}".replace(".",",")
         maiorEntradaValidacao = f"{maiorEntrada.nome} - R${maiorEntradaFormatada}"
     else: maiorEntradaValidacao = "nenhuma entrada cadastrada"
+    if maiorSaida is not None:
+        maiorSaidaFormatada = f"{maiorSaida.valor:.2f}".replace(".", ",")
+        maiorSaidaValidacao = f"{maiorSaida.nome} - R${maiorSaidaFormatada}"
+    else: maiorSaidaValidacao = "nenhuma saída cadastrada"
+
     print("=" * 15)
     print(" RELATÓRIO ")
     print("=" * 15)
     print (f"Entradas: R${entradaFormatada} \n"
            f"Saídas:  R${saidaFormatada} \n" 
            f"Saldo final: R${saldoFormatado}\n"
-           f"Maior entrada:{maiorEntradaValidacao}\n")      
+           f"Maior entrada:{maiorEntradaValidacao}\n"
+           f"Maior saída: {maiorSaidaValidacao}\n")
+    print("=" *20)
+    print("Gastos por Categoria")
+    print("="*20)
+    for categoria in gastosCategoria:
+        valorFormatadoSaidas = f"{gastosCategoria[categoria]:.2f}".replace(".",",")
+        print(f"{categoria}: R${valorFormatadoSaidas}")
+    print("=" *20)
+    print("Ganhos por Categoria")
+    print("="*20)
+    for categoria in entradasCategoria:
+        valorFormatadoEntradas = f"{entradasCategoria[categoria]:.2f}".replace(".",",")
+        print(f"{categoria}: R${valorFormatadoEntradas}")
                 
 lista = []
 carregarJSon()
