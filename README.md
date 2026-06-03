@@ -1,26 +1,49 @@
-#  Sistema de Controle Financeiro
+# Sistema de Controle Financeiro
 
-Projeto desenvolvido em Python com foco em organização financeira no terminal.
+Projeto desenvolvido em Python com foco em organização financeira e análise de dados através do terminal.
 
-A ideia do projeto foi criar um sistema simples, mas funcional, para praticar lógica de programação, orientação a objetos, manipulação de arquivos JSON e organização de código. O propósito é transformar o projeto em app.
+A ideia inicial foi criar um CRUD para praticar lógica de programação, orientação a objetos e persistência de dados. Conforme o projeto evoluiu, novas funcionalidades foram adicionadas para aproximá-lo de um sistema financeiro real.
 
----
-
-# Funcionalidades do Projeto:
-
-- Adicionar movimentações
-- Listar movimentações
-- Editar movimentações
-- Remover movimentações
-- Mostrar saldo atual
-- Filtrar por categoria
-- Filtrar por data
-- Salvamento automático em JSON
-- Carregamento automático dos dados ao iniciar o sistema
+O objetivo futuro é transformar a aplicação em uma API e posteriormente em um aplicativo completo.
 
 ---
 
-#  Tecnologias utilizadas
+# Funcionalidades
+
+### Movimentações
+
+* Adicionar movimentações
+* Listar movimentações
+* Editar movimentações
+* Remover movimentações
+
+### Consultas
+
+* Mostrar saldo atual
+* Filtrar movimentações por categoria
+* Filtrar movimentações por data
+
+### Relatórios e Análises
+
+* Relatório financeiro consolidado
+* Total de entradas
+* Total de saídas
+* Saldo final
+* Maior entrada registrada
+* Maior saída registrada
+* Agrupamento de gastos por categoria
+* Agrupamento de ganhos por categoria
+* Categoria com maior gasto
+* Categoria com maior receita
+
+### Persistência de Dados
+
+* Salvamento automático em JSON
+* Carregamento automático ao iniciar o sistema
+
+---
+
+# Tecnologias Utilizadas
 
 * Python
 * JSON
@@ -28,52 +51,70 @@ A ideia do projeto foi criar um sistema simples, mas funcional, para praticar l�
 
 ---
 
-#  O que pratiquei nesse projeto
+# Conceitos Praticados
 
-Durante o desenvolvimento desse sistema, pratiquei conceitos importantes como:
+Durante o desenvolvimento deste projeto foram aplicados conceitos como:
 
 * Estruturas de repetição
-* Condicionais
+* Estruturas condicionais
 * Funções
-* Classes e objetos
-* Modularização
+* Classes e Objetos
+* Dicionários
+* Manipulação de arquivos
 * Persistência de dados
-* Tratamento de erros
-* Manipulação de arquivos JSON
+* Tratamento de exceções
 * Organização e refatoração de código
+* Estruturas de dados para geração de relatórios
+* Análise e agrupamento de informações
 
 ---
 
-#  Objetivo do projeto
+# Objetivo do Projeto
 
-Além de praticar a estrutura da programação, o objetivo desse projeto foi simular um sistema mais próximo de aplicações reais, focando não só em fazer funcionar, mas também em organização, clareza e evolução do código.
+Além de praticar fundamentos da programação, o projeto busca simular situações encontradas em aplicações reais, focando em:
+
+* Organização de código
+* Evolução incremental de funcionalidades
+* Persistência de dados
+* Geração de relatórios
+* Tratamento de informações financeiras
 
 ---
 
-#  Próximas melhorias
+# Próximas Melhorias
 
-* IDs automáticos
+* Exportação de relatórios para CSV
+* Separação do projeto em múltiplos arquivos
 * Melhorias visuais no terminal
-* Relatórios financeiros
+* Geração de gráficos financeiros
+* IDs automáticos para movimentações
 * Conversão para API com Flask
-* Integração com banco de dados
+* Integração com banco de dados SQL
 
 ---
 
-#  Como executar
+# Como Executar
 
 Clone o repositório:
 
 ```bash
-git clone LINK_DO_REPOSITORIO
+git clone https://github.com/zTHIAGOz/OrganizacaoFinanceiraPython.git
 ```
 
-Depois execute:
+Acesse a pasta do projeto:
 
 ```bash
-python nome_do_arquivo.py
+cd OrganizacaoFinanceiraPython
+```
+
+Execute o programa:
+
+```bash
+python main.py
 ```
 
 ---
 
-Desenvolvido por Thiago Figueiredo 
+## Autor
+
+Desenvolvido por **Thiago Figueiredo**.
