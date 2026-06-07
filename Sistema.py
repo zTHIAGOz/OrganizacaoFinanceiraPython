@@ -148,7 +148,7 @@ def salvarJson():
     listaJson = []
     for u in lista:
         listaJson.append(u.conversao())
-    with open ("dados.json","w") as arquivo:
+    with open (nomeArquivo(),"w") as arquivo:
         json.dump(
             listaJson,
             arquivo,
@@ -156,7 +156,7 @@ def salvarJson():
 
 def carrefarJson():
     try:
-        with open ("dados.json", "r") as arquivo:
+        with open (nomeArquivo(), "r") as arquivo:
             dados = json.dados:
             for item in dados:
                 u = Objetos(
@@ -265,6 +265,11 @@ def carrefarJson():
     print("="*15)    
     print(f"Categoria com maior gasto: {categoriaMaiorGasto}")
     print (f"Categoria com maior entrada: {categoriaMaiorEntrada}")
+
+def nomeArquivo():
+    data = datetime.datetime.now()
+    dataFormatada = data.strftime("%Y-%m")
+    return dataFormatada + ".json"
                 
 lista = []
 carregarJSon()
