@@ -1,14 +1,14 @@
 class Objetos:
-    
+
     def __init__(self, nome, valor, tipo, data, categoria):
         self.nome = nome
         self.valor = valor
         self.tipo = tipo
         self.data = data
         self.categoria = categoria
-    
-    def mostrar_resultado(self):    
-        valorFormatado = f"{self.valor:.2f}".replace(".",",")
+
+    def mostrarResultado(self):
+        valorFormatado = f"{self.valor:.2f}".replace(".", ",")
         if self.tipo.lower() == "entrada":
             print(f"{self.nome} - +R${valorFormatado} - {self.data} - {self.categoria}")
         elif self.tipo.lower() == "saida":
@@ -17,19 +17,20 @@ class Objetos:
             print(f"{self.nome} - R${valorFormatado} - {self.data} - {self.categoria}")
 
     def conversao(self):
-        return{
-            "nome" : self.nome,
-            "valor" : self.valor,
-            "tipo" : self.tipo,
-            "data" : self.data,
-            "categoria" : self.categoria
-        }
+        return {
+        "nome" : self.nome,
+        "valor" : self.valor,
+        "tipo": self.tipo,
+        "data" : self.data,
+        "categoria" : self.categoria
+    }
+
 
 def cabecalho():
     print("="*22)
     print(" CONTROLE FINANCEIRO ")
     print("="*22)
-    
+
 def menu():
     print(
         "\n1 - Adicionar movimentação"
@@ -39,7 +40,10 @@ def menu():
         "\n5 - Filtrar por data"
         "\n6 - Editar movimentação"
         "\n7 - Remover movimentação"
-        "\n8 - Sair\n"
+        "\n8 - Relatório financeiro"
+        "\n9 - Consultar histórico mensal"
+        "\n10 - Sair\n"
+        
     )
 
 def validacaoTipo(texto):
@@ -49,36 +53,38 @@ def validacaoTipo(texto):
             valorTipo = input("Digite entrada/saida para a movimentação: " )
     return valorTipo
 
+
 def adicionar():
     nome = entrada("Nome da movimentação: ")
     valor = float(entrada("Valor da movimentação: "))
     tipo = validacaoTipo("Tipo (entrada/saida): ")
     data = escolherData()
-    categoria = entrada("Digite a categoria: ")
+    categoria = entrada ("Digite a categoria: ")
     u = Objetos(nome, valor, tipo, data, categoria)
     lista.append(u)
     print("Movimentação cadastrada com sucesso!")
     salvarJson()
 
 def listar():
-    print("\n Movimentações cadastradas: \n")
+    print("\nMovimentações cadastradas:\n")
     for u in lista:
-        u.mostrarResultados()
-        
-def mostrar_saldo():
-    saldo_total = 0
+        u.mostrarResultado()
+
+def mostrarSaldo():
+    saldoTotal = 0
     for u in lista:
         if u.tipo.lower() == "entrada":
-            saldo_total += u.valor
+            saldoTotal += u.valor
         elif u.tipo.lower() == "saida":
-            saldo_total -= u.valor
-    print(f"\nSaldo atual: R${saldo_total}")
+            saldoTotal -= u.valor
+    saldoFormatado = f"{saldoTotal:.2f}".replace(".", ",")
+    print(f"\nSaldo atual: R${saldoFormatado}")
 
 def entrada(texto):
-    valor = input(texto)
+    valor = input(texto).strip()
     while not valor:
         print ("Digite uma opção válida! ")
-        valor = input(texto)
+        valor = input(texto).strip()
     return valor
 
 def filtrarCategoria():
@@ -91,15 +97,18 @@ def filtrarCategoria():
             
     if encontrar == False:
         print("Categoria não encontrada!")
-
+            
+            
+            
 import datetime
 import json
+
 
 def escolherData():
     data = datetime.datetime.now()
     dataFormatada = data.strftime("%d/%m/%Y")
     return dataFormatada
-            
+
 def filtrarData():
     encontrar = False
     filtroData = input("Qual data deseja acessar:")
@@ -115,11 +124,11 @@ def editar():
     edicao = input("Qual movimentação deseja editar: ")
     for u in lista:
         if edicao.lower() == u.nome.lower():
-            novoNome = input("Qual o novo nome: ")
-            novoValor = float(input("Qual o novo valor: "))
-            novoTipo = input("Qual  o novo tipo: ")
-            novaData = input("Qual a nova data: ")
-            novaCategoria = input("Qual a nova categoria: ")
+            novoNome = entrada("Qual o novo nome: ")
+            novoValor = float(entrada("Qual o novo valor: "))
+            novoTipo = validacaoTipo("Qual  o novo tipo: ")
+            novaData = entrada("Qual a nova data: ")
+            novaCategoria = entrada("Qual a nova categoria: ")
             u.nome = novoNome
             u.valor = novoValor
             u.tipo = novoTipo
@@ -148,29 +157,30 @@ def salvarJson():
     listaJson = []
     for u in lista:
         listaJson.append(u.conversao())
-    with open (nomeArquivo(),"w") as arquivo:
-        json.dump(
+    with open (nomeArquivo(), "w") as arquivo : #abri dados.json em modo escrita e chamar ele de arquivo (o w é de write)
+        json.dump( #escreva a listajson dentro do arquivo (codigo abaixo)
             listaJson,
             arquivo,
-            inednt = 4)
+            indent=4
+            )
 
-def carrefarJson():
+def carregarJson():
     try:
-        with open (nomeArquivo(), "r") as arquivo:
-            dados = json.dados:
-            for item in dados:
+        with open (nomeArquivo(), "r") as arquivo: #abrir dadosjson(é o arquivo) em modo leitura e chamar ele de arquivo (o r é de read)
+            dados = json.load(arquivo) #carrega os dados em modo lista de dicionario 
+            for item in dados: #percorre cada item do dicionario
                 u = Objetos(
-                    item ["nome"],
-                    item ["valor"],
-                    item ["tipo"],
-                    item ["data"],
-                    item ["categoria"]
-                )
+                item ["nome"],
+                item ["valor"],
+                item ["tipo"],
+                item ["data"],
+                item ["categoria"]
+            )
                 lista.append(u)
     except FileNotFoundError:
         pass
-        
- def mostrarRelatório():
+
+def mostrarRelatório():
     entradaTotal = 0
     saidaTotal = 0
     maiorEntrada = None
@@ -270,9 +280,22 @@ def nomeArquivo():
     data = datetime.datetime.now()
     dataFormatada = data.strftime("%Y-%m")
     return dataFormatada + ".json"
-                
+
+def consultaMensal():
+    mes = input("Digite o mês de consulta: (ano/mes - '2026-05' por exemplo) ").strip()
+    arquivoConsulta = mes + ".json"
+    try:
+        with open (arquivoConsulta, "r") as arquivo:
+            dados = json.load(arquivo)
+            for item in dados:
+                valorFormatado = f"{item['valor']:.2f}".replace(".", ",")
+                print (f"{item['nome']} - R${valorFormatado} - {item['data']} - {item['categoria']}")
+
+    except FileNotFoundError:
+            print("Nenhum registro encontrado!")
+    
 lista = []
-carregarJSon()
+carregarJson()
 
 
 while True:
@@ -281,14 +304,15 @@ while True:
 
     menu()
     opcao = input("Escolha uma opção: ")
+    
     if opcao == "1":
-      adicionar()
-        
+        adicionar()
+    
     elif opcao == "2":
         listar()
-        
+    
     elif opcao == "3":
-        mostrar_saldo()
+        mostrarSaldo()
     
     elif opcao == "4":
         filtrarCategoria()
@@ -298,12 +322,17 @@ while True:
 
     elif opcao == "6":
         editar()
-       
-
+        
     elif opcao == "7":
         remover()
-
+        
     elif opcao == "8":
+        mostrarRelatório()
+
+    elif opcao == "9":
+        consultaMensal()
+
+    elif opcao == "10":
         print("Encerrando o programa...")
         break
 
