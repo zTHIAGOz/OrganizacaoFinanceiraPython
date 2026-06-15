@@ -293,6 +293,12 @@ def consultaMensal():
 
     except FileNotFoundError:
             print("Nenhum registro encontrado!")
+
+     def exportarCSV():
+        with open ("relatorio.csv", "w") as arquivo:
+            arquivo.write("Nome, Valor, Tipo, Data, Categoria\n")
+            for u in lista:
+                arquivo.write(f"{u.nome},{u.valor},{u.tipo},{u.data},{u.categoria}\n")
     
 lista = []
 carregarJson()
