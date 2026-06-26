@@ -42,7 +42,9 @@ def menu():
         "\n7 - Remover movimentação"
         "\n8 - Relatório financeiro"
         "\n9 - Consultar histórico mensal"
-        "\n10 - Sair\n"
+        "\n10 - Exportar arquivo CSV"
+        "\n11 - Sair\n"
+
         
     )
 
@@ -180,101 +182,160 @@ def carregarJson():
     except FileNotFoundError:
         pass
 
-def mostrarRelatório():
+def gerarDadosRelatorio():
+
     entradaTotal = 0
     saidaTotal = 0
     maiorEntrada = None
     maiorSaida = None
     gastosCategoria = {}
     entradasCategoria = {}
-    
 
     for u in lista:
         if u.tipo.lower() == "entrada":
             entradaTotal += u.valor
+
             if maiorEntrada is None:
                 maiorEntrada = u
             elif u.valor > maiorEntrada.valor:
                 maiorEntrada = u
+
             if u.categoria not in entradasCategoria:
                 entradasCategoria[u.categoria] = u.valor
-            else: entradasCategoria[u.categoria] += u.valor
+            else:
+                entradasCategoria[u.categoria] += u.valor
+
         elif u.tipo.lower() == "saida":
-            saidaTotal += u.valor 
+
+            saidaTotal += u.valor
+
             if maiorSaida is None:
                 maiorSaida = u
             elif u.valor > maiorSaida.valor:
                 maiorSaida = u
+
             if u.categoria not in gastosCategoria:
                 gastosCategoria[u.categoria] = u.valor
-            else:gastosCategoria[u.categoria] += u.valor
+            else: 
+                gastosCategoria [u.categoria] += u.valor
+
+    saldoFinal = entradaTotal - saidaTotal
 
     maiorCategoriaGasto = None
-
+    
     for categoria in gastosCategoria:
-        if maiorCategoriaGasto is None:
-            maiorCategoriaGasto = categoria
-        elif gastosCategoria[categoria] > gastosCategoria[maiorCategoriaGasto]:
-            maiorCategoriaGasto = categoria 
-    if maiorCategoriaGasto is not None:
-        valorMaiorCategoriaGasto = gastosCategoria[maiorCategoriaGasto]
-        valorMaiorCategoriaFormatadoGasto = f"{valorMaiorCategoriaGasto:.2f}".replace("." , ",")
-
+            if maiorCategoriaGasto is None:
+                maiorCategoriaGasto = categoria
+            elif gastosCategoria[categoria] > gastosCategoria[maiorCategoriaGasto]:
+                maiorCategoriaGasto = categoria 
+    
     maiorCategoriaEntrada = None
-
+    
     for categoria in entradasCategoria:
-        if maiorCategoriaEntrada is None:
-            maiorCategoriaEntrada = categoria
-        elif entradasCategoria [categoria] > entradasCategoria[maiorCategoriaEntrada]:
-            maiorCategoriaEntrada = categoria
-    if maiorCategoriaEntrada is not None: 
-        valorMaiorCategoriaEntrada = entradasCategoria[maiorCategoriaEntrada]
-        valorMaiorCategoriaFormatadoEntrada = f"{valorMaiorCategoriaEntrada:.2f}".replace(".",",")
+            if maiorCategoriaEntrada is None:
+                maiorCategoriaEntrada = categoria
+            elif entradasCategoria [categoria] > entradasCategoria[maiorCategoriaEntrada]:
+                maiorCategoriaEntrada = categoria
+                
+    return {
+            "entradaTotal": entradaTotal,
+            "saidaTotal": saidaTotal, 
+            "maiorEntrada": maiorEntrada, 
+            "maiorSaida": maiorSaida, 
+            "gastosCategoria": gastosCategoria,
+            "entradasCategoria": entradasCategoria, 
+            "maiorCategoriaGasto": maiorCategoriaGasto,
+            "maiorCategoriaEntrada": maiorCategoriaEntrada,
+            "saldoFinal" : saldoFinal
+        }
 
-    saldoFinal = entradaTotal  - saidaTotal
+def mostrarRelatório():
+
+    dados = gerarDadosRelatorio()
+
+    entradaTotal =  dados["entradaTotal"]
+    saidaTotal = dados["saidaTotal"]
+    saldoFinal = dados["saldoFinal"]
+    maiorEntrada = dados["maiorEntrada"]
+    maiorSaida = dados["maiorSaida"]
+    maiorCategoriaGasto = dados["maiorCategoriaGasto"]
+    maiorCategoriaEntrada = dados["maiorCategoriaEntrada"]
+    gastosCategoria = dados["gastosCategoria"]
+    entradasCategoria = dados["entradasCategoria"]
+
     entradaFormatada = f"{entradaTotal:.2f}".replace(".", ",")
     saidaFormatada = f"{saidaTotal:.2f}".replace(".", ",")
     saldoFormatado = f"{saldoFinal:.2f}".replace(".", ",")
-    if maiorEntrada is not None:
-        maiorEntradaFormatada = f"{maiorEntrada.valor:.2f}".replace(".",",")
-        maiorEntradaValidacao = f"{maiorEntrada.nome} - R${maiorEntradaFormatada}"
-    else: maiorEntradaValidacao = "nenhuma entrada cadastrada"
-    if maiorSaida is not None:
-        maiorSaidaFormatada = f"{maiorSaida.valor:.2f}".replace(".", ",")
-        maiorSaidaValidacao = f"{maiorSaida.nome} - R${maiorSaidaFormatada}"
-    else: maiorSaidaValidacao = "nenhuma saída cadastrada"
-    if maiorCategoriaGasto is not None:
-        categoriaMaiorGasto = f"{maiorCategoriaGasto} - R${valorMaiorCategoriaFormatadoGasto}"
-    else: categoriaMaiorGasto = "Nenhum gasto cadastrado"
-    if maiorCategoriaEntrada is not None:
-        categoriaMaiorEntrada = f"{maiorCategoriaEntrada} - R${valorMaiorCategoriaFormatadoEntrada}"
-    else: categoriaMaiorEntrada = "Nenhum entrada cadastrada"
 
-    print("=" * 15)
-    print(" RELATÓRIO ")
-    print("=" * 15)
-    print (f"Entradas: R${entradaFormatada} \n"
-           f"Saídas:  R${saidaFormatada} \n" 
-           f"Saldo final: R${saldoFormatado}\n"
-           f"Maior entrada: {maiorEntradaValidacao}\n"
-           f"Maior saída: {maiorSaidaValidacao}\n")
-    print("=" *20)
+    if maiorEntrada is not None:
+           maiorEntradaFormatada = f"{maiorEntrada.valor:.2f}".replace("." , ",")
+           maiorEntradaValidacao = (
+               f"{maiorEntrada.nome} - R${maiorEntradaFormatada}"
+           )
+    else:
+        maiorEntradaValidacao = "Nenhuma entrada cadastrada"
+
+
+    if maiorSaida is not None:
+        maiorSaidaFormatada = f"{maiorSaida.valor:.2f}".replace(".",",")
+        maiorSaidaValidacao = (
+            f"{maiorSaida.nome} - R${maiorSaidaFormatada}"
+        )
+    else: 
+        maiorSaidaValidacao = "Nenhuma saída cadastrada"
+
+
+    if maiorCategoriaGasto is not None:
+            maiorCategoriaGastoFormatada = f"{gastosCategoria[maiorCategoriaGasto]:.2f}".replace(".",",")
+            maiorCategoriaGastoValidacao = (f"{maiorCategoriaGasto} - R${maiorCategoriaGastoFormatada}")
+    else:
+            maiorCategoriaGastoValidacao = ("Nenhuma saída cadastrada")
+
+    
+    if maiorCategoriaEntrada is not None:
+            maiorCategoriaEntradaFormatada = f"{entradasCategoria[maiorCategoriaEntrada]:.2f}".replace(".",",")
+            maiorCategoriaEntradaValidacao = (f"{maiorCategoriaEntrada} - R${maiorCategoriaEntradaFormatada}")
+    else:
+            maiorCategoriaEntradaValidacao = ("Nenhuma entrada cadastrada")
+
+   
+    
+    print("="*15)
+    print("RELATÓRIO FINANCEIRO")
+    print("="*15)
+
+    print()
+
+    print(f"Entradas: R${entradaFormatada}")
+    print(f"Saídas: R${saidaFormatada}")
+    print(f"Saldo: R${saldoFormatado}")
+
+    print()
+
+    print(f"Maior entrada: {maiorEntradaValidacao}")
+    print(f"Maior saída: {maiorSaidaValidacao}")
+    print(f"Maior categoria de gastos: {maiorCategoriaGastoValidacao}")
+    print(f"Maior categoria de entradas: {maiorCategoriaEntradaValidacao}")
+
+    print()
+
+    print("=" *15)
     print("Gastos por Categoria")
-    print("="*20)
+    print("="*15)
+
     for categoria in gastosCategoria:
-        valorFormatadoSaidas = f"{gastosCategoria[categoria]:.2f}".replace(".",",")
-        print(f"{categoria}: R${valorFormatadoSaidas}")
-    print("=" *20)
-    print("Ganhos por Categoria")
-    print("="*20)
+            valorFormatadoSaidas = f"{gastosCategoria[categoria]:.2f}".replace(".",",")
+            print(f"{categoria}: R${valorFormatadoSaidas}")
+            print()
+
+    print("=" *15)
+    print("Entradas por Categoria")
+    print("="*15)
+
     for categoria in entradasCategoria:
         valorFormatadoEntradas = f"{entradasCategoria[categoria]:.2f}".replace(".",",")
         print(f"{categoria}: R${valorFormatadoEntradas}")
-    print("=" *15)
-    print("Resumo Categorias")
-    print("="*15)    
-    print(f"Categoria com maior gasto: {categoriaMaiorGasto}")
-    print (f"Categoria com maior entrada: {categoriaMaiorEntrada}")
+        print()
 
 def nomeArquivo():
     data = datetime.datetime.now()
@@ -294,7 +355,7 @@ def consultaMensal():
     except FileNotFoundError:
             print("Nenhum registro encontrado!")
 
-     def exportarCSV():
+def exportarCSV():
         with open ("relatorio.csv", "w") as arquivo:
             arquivo.write("Nome, Valor, Tipo, Data, Categoria\n")
             for u in lista:
@@ -339,6 +400,9 @@ while True:
         consultaMensal()
 
     elif opcao == "10":
+        exportarCSV()
+
+    elif opcao == "11":
         print("Encerrando o programa...")
         break
 
