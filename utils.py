@@ -13,10 +13,12 @@ def entrada(texto):
     return valor
 
 def validacaoTipo(texto):
-    valorTipo = input(texto) 
+    valorTipo = input(texto).strip().lower()
+
     while valorTipo not in ("entrada", "saida"):
-            print("Opção não é válida!") 
-            valorTipo = input("Digite entrada/saida para a movimentação: " )
+        print("Opção não é válida!")
+        valorTipo = input(texto).strip().lower()
+
     return valorTipo
 
 def escolherData():
