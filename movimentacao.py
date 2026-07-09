@@ -1,3 +1,9 @@
+from utils import cabecalho
+from utils import entrada
+from utils import validacaoTipo
+from utils import escolherData
+from utils import formatarMoeda
+
 class Objetos:
 
     def __init__(self, nome, valor, tipo, data, categoria):
@@ -8,7 +14,7 @@ class Objetos:
         self.categoria = categoria
 
     def mostrarResultado(self):
-        valorFormatado = f"{self.valor:.2f}".replace(".", ",")
+        valorFormatado = formatarMoeda(self.valor)
         if self.tipo.lower() == "entrada":
             print(f"{self.nome} - +R${valorFormatado} - {self.data} - {self.categoria}")
         elif self.tipo.lower() == "saida":
@@ -24,12 +30,6 @@ class Objetos:
         "data" : self.data,
         "categoria" : self.categoria
     }
-
-
-def cabecalho():
-    print("="*22)
-    print(" CONTROLE FINANCEIRO ")
-    print("="*22)
 
 def menu():
     print(
@@ -48,53 +48,38 @@ def menu():
         
     )
 
-def validacaoTipo(texto):
-    valorTipo = input("Qual o tipo da movimentação: ") 
-    while valorTipo not in ("entrada", "saida"):
-            print("Opção não é válida!") 
-            valorTipo = input("Digite entrada/saida para a movimentação: " )
-    return valorTipo
-
-
 def adicionar():
     nome = entrada("Nome da movimentação: ")
     valor = float(entrada("Valor da movimentação: "))
-    tipo = validacaoTipo("Tipo (entrada/saida): ")
+    tipo = validacaoTipo("Qual o tipo da movimentação (entrada/saida): ")
     data = escolherData()
     categoria = entrada ("Digite a categoria: ")
-    u = Objetos(nome, valor, tipo, data, categoria)
-    lista.append(u)
+    movimentacao = Objetos(nome, valor, tipo, data, categoria)
+    lista.append(movimentacao)
     print("Movimentação cadastrada com sucesso!")
     salvarJson()
 
 def listar():
     print("\nMovimentações cadastradas:\n")
-    for u in lista:
-        u.mostrarResultado()
+    for movimentacao in lista:
+        movimentacao.mostrarResultado()
 
 def mostrarSaldo():
     saldoTotal = 0
-    for u in lista:
-        if u.tipo.lower() == "entrada":
-            saldoTotal += u.valor
-        elif u.tipo.lower() == "saida":
-            saldoTotal -= u.valor
-    saldoFormatado = f"{saldoTotal:.2f}".replace(".", ",")
+    for movimentacao in lista:
+        if movimentacao.tipo.lower() == "entrada":
+            saldoTotal += movimentacao.valor
+        elif movimentacao.tipo.lower() == "saida":
+            saldoTotal -= movimentacao.valor
+    saldoFormatado = formatarMoeda(saldoTotal)
     print(f"\nSaldo atual: R${saldoFormatado}")
-
-def entrada(texto):
-    valor = input(texto).strip()
-    while not valor:
-        print ("Digite uma opção válida! ")
-        valor = input(texto).strip()
-    return valor
 
 def filtrarCategoria():
     encontrar = False
     categoria = input("Qual categoria deseja acessar:")
-    for u in lista:
-        if categoria.lower() == u.categoria.lower():
-            u.mostrarResultado()
+    for movimentacao in lista:
+        if categoria.lower() == movimentacao.categoria.lower():
+            movimentacao.mostrarResultado()
             encontrar = True
             
     if encontrar == False:
@@ -104,12 +89,6 @@ def filtrarCategoria():
             
 import datetime
 import json
-
-
-def escolherData():
-    data = datetime.datetime.now()
-    dataFormatada = data.strftime("%d/%m/%Y")
-    return dataFormatada
 
 def filtrarData():
     encontrar = False
@@ -124,18 +103,18 @@ def filtrarData():
 def editar():
     encontrar = False
     edicao = input("Qual movimentação deseja editar: ")
-    for u in lista:
-        if edicao.lower() == u.nome.lower():
+    for movimentacao in lista:
+        if edicao.lower() == movimentacao.nome.lower():
             novoNome = entrada("Qual o novo nome: ")
             novoValor = float(entrada("Qual o novo valor: "))
             novoTipo = validacaoTipo("Qual  o novo tipo: ")
             novaData = entrada("Qual a nova data: ")
             novaCategoria = entrada("Qual a nova categoria: ")
-            u.nome = novoNome
-            u.valor = novoValor
-            u.tipo = novoTipo
-            u.data = novaData
-            u.categoria = novaCategoria
+            movimentacao.nome = novoNome
+            movimentacao.valor = novoValor
+            movimentacao.tipo = novoTipo
+            movimentacao.data = novaData
+            movimentacao.categoria = novaCategoria
             encontrar = True
             print("Editada com sucesso!")
             salvarJson()
@@ -145,9 +124,9 @@ def editar():
 def remover ():
     encontrar = False
     removendo = input("Qual movimentação deseja remover: ")
-    for u in lista: 
-        if removendo.lower() == u.nome.lower():
-            lista.remove(u)
+    for movimentacao in lista: 
+        if removendo.lower() == movimentacao.nome.lower():
+            lista.remove(movimentacao)
             print("Movimentação removida com sucesso!")
             salvarJson()
             encontrar = True
@@ -157,8 +136,8 @@ def remover ():
 
 def salvarJson():
     listaJson = []
-    for u in lista:
-        listaJson.append(u.conversao())
+    for movimentacao in lista:
+        listaJson.append(movimentacao.conversao())
     with open (nomeArquivo(), "w") as arquivo : #abri dados.json em modo escrita e chamar ele de arquivo (o w é de write)
         json.dump( #escreva a listajson dentro do arquivo (codigo abaixo)
             listaJson,
@@ -171,14 +150,14 @@ def carregarJson():
         with open (nomeArquivo(), "r") as arquivo: #abrir dadosjson(é o arquivo) em modo leitura e chamar ele de arquivo (o r é de read)
             dados = json.load(arquivo) #carrega os dados em modo lista de dicionario 
             for item in dados: #percorre cada item do dicionario
-                u = Objetos(
+                movimentacao = Objetos(
                 item ["nome"],
                 item ["valor"],
                 item ["tipo"],
                 item ["data"],
                 item ["categoria"]
             )
-                lista.append(u)
+                lista.append(movimentacao)
     except FileNotFoundError:
         pass
 
@@ -191,33 +170,33 @@ def gerarDadosRelatorio():
     gastosCategoria = {}
     entradasCategoria = {}
 
-    for u in lista:
-        if u.tipo.lower() == "entrada":
-            entradaTotal += u.valor
+    for movimentacao in lista:
+        if movimentacao.tipo.lower() == "entrada":
+            entradaTotal += movimentacao.valor
 
             if maiorEntrada is None:
-                maiorEntrada = u
-            elif u.valor > maiorEntrada.valor:
-                maiorEntrada = u
+                maiorEntrada = movimentacao
+            elif movimentacao.valor > maiorEntrada.valor:
+                maiorEntrada = movimentacao
 
-            if u.categoria not in entradasCategoria:
-                entradasCategoria[u.categoria] = u.valor
+            if movimentacao.categoria not in entradasCategoria:
+                entradasCategoria[movimentacao.categoria] = movimentacao.valor
             else:
-                entradasCategoria[u.categoria] += u.valor
+                entradasCategoria[movimentacao.categoria] += movimentacao.valor
 
-        elif u.tipo.lower() == "saida":
+        elif movimentacao.tipo.lower() == "saida":
 
-            saidaTotal += u.valor
+            saidaTotal += movimentacao.valor
 
             if maiorSaida is None:
-                maiorSaida = u
-            elif u.valor > maiorSaida.valor:
-                maiorSaida = u
+                maiorSaida = movimentacao
+            elif movimentacao.valor > maiorSaida.valor:
+                maiorSaida = movimentacao
 
-            if u.categoria not in gastosCategoria:
-                gastosCategoria[u.categoria] = u.valor
+            if movimentacao.categoria not in gastosCategoria:
+                gastosCategoria[movimentacao.categoria] = movimentacao.valor
             else: 
-                gastosCategoria [u.categoria] += u.valor
+                gastosCategoria [movimentacao.categoria] += movimentacao.valor
 
     saldoFinal = entradaTotal - saidaTotal
 
@@ -263,12 +242,12 @@ def mostrarRelatório():
     gastosCategoria = dados["gastosCategoria"]
     entradasCategoria = dados["entradasCategoria"]
 
-    entradaFormatada = f"{entradaTotal:.2f}".replace(".", ",")
-    saidaFormatada = f"{saidaTotal:.2f}".replace(".", ",")
-    saldoFormatado = f"{saldoFinal:.2f}".replace(".", ",")
+    entradaFormatada = formatarMoeda(entradaTotal)
+    saidaFormatada = formatarMoeda(saidaTotal)
+    saldoFormatado = formatarMoeda(saldoFinal)
 
     if maiorEntrada is not None:
-           maiorEntradaFormatada = f"{maiorEntrada.valor:.2f}".replace("." , ",")
+           maiorEntradaFormatada = formatarMoeda(maiorEntrada.valor)
            maiorEntradaValidacao = (
                f"{maiorEntrada.nome} - R${maiorEntradaFormatada}"
            )
@@ -277,7 +256,7 @@ def mostrarRelatório():
 
 
     if maiorSaida is not None:
-        maiorSaidaFormatada = f"{maiorSaida.valor:.2f}".replace(".",",")
+        maiorSaidaFormatada = formatarMoeda(maiorSaida.valor)
         maiorSaidaValidacao = (
             f"{maiorSaida.nome} - R${maiorSaidaFormatada}"
         )
@@ -286,14 +265,14 @@ def mostrarRelatório():
 
 
     if maiorCategoriaGasto is not None:
-            maiorCategoriaGastoFormatada = f"{gastosCategoria[maiorCategoriaGasto]:.2f}".replace(".",",")
+            maiorCategoriaGastoFormatada = formatarMoeda(gastosCategoria[maiorCategoriaGasto])
             maiorCategoriaGastoValidacao = (f"{maiorCategoriaGasto} - R${maiorCategoriaGastoFormatada}")
     else:
             maiorCategoriaGastoValidacao = ("Nenhuma saída cadastrada")
 
     
     if maiorCategoriaEntrada is not None:
-            maiorCategoriaEntradaFormatada = f"{entradasCategoria[maiorCategoriaEntrada]:.2f}".replace(".",",")
+            maiorCategoriaEntradaFormatada = formatarMoeda(entradasCategoria[maiorCategoriaEntrada])
             maiorCategoriaEntradaValidacao = (f"{maiorCategoriaEntrada} - R${maiorCategoriaEntradaFormatada}")
     else:
             maiorCategoriaEntradaValidacao = ("Nenhuma entrada cadastrada")
@@ -324,7 +303,7 @@ def mostrarRelatório():
     print("="*15)
 
     for categoria in gastosCategoria:
-            valorFormatadoSaidas = f"{gastosCategoria[categoria]:.2f}".replace(".",",")
+            valorFormatadoSaidas = formatarMoeda(gastosCategoria[categoria])
             print(f"{categoria}: R${valorFormatadoSaidas}")
             print()
 
@@ -333,7 +312,7 @@ def mostrarRelatório():
     print("="*15)
 
     for categoria in entradasCategoria:
-        valorFormatadoEntradas = f"{entradasCategoria[categoria]:.2f}".replace(".",",")
+        valorFormatadoEntradas = formatarMoeda(entradasCategoria[categoria])
         print(f"{categoria}: R${valorFormatadoEntradas}")
         print()
 
@@ -349,7 +328,7 @@ def consultaMensal():
         with open (arquivoConsulta, "r") as arquivo:
             dados = json.load(arquivo)
             for item in dados:
-                valorFormatado = f"{item['valor']:.2f}".replace(".", ",")
+                valorFormatado = formatarMoeda(item["valor"])
                 print (f"{item['nome']} - R${valorFormatado} - {item['data']} - {item['categoria']}")
 
     except FileNotFoundError:
@@ -358,8 +337,12 @@ def consultaMensal():
 def exportarCSV():
         with open ("relatorio.csv", "w") as arquivo:
             arquivo.write("Nome, Valor, Tipo, Data, Categoria\n")
-            for u in lista:
-                arquivo.write(f"{u.nome},{u.valor},{u.tipo},{u.data},{u.categoria}\n")
+            for movimentacao in lista:
+                arquivo.write(f"{movimentacao.nome},"
+                              f"{movimentacao.valor},"
+                              f"{movimentacao.tipo},"
+                              f"{movimentacao.data},"
+                              f"{movimentacao.categoria}\n")
     
 lista = []
 carregarJson()
