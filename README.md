@@ -1,45 +1,53 @@
 # Sistema de Controle Financeiro
 
-Projeto desenvolvido em Python com foco em organização financeira e análise de dados através do terminal.
+Projeto desenvolvido em Python com foco em organização financeira, lógica de programação e arquitetura de software.
 
-A ideia inicial foi criar um CRUD para praticar lógica de programação, orientação a objetos e persistência de dados. Conforme o projeto evoluiu, novas funcionalidades foram adicionadas para aproximá-lo de um sistema financeiro real.
+O sistema começou como um simples CRUD criado durante minha transição de estudos de Java para Python e, ao longo do desenvolvimento, evoluiu para uma aplicação mais estruturada, utilizando modularização, persistência de dados e geração de relatórios financeiros.
 
-O objetivo futuro é transformar a aplicação em uma API e posteriormente em um aplicativo completo.
+O objetivo do projeto é continuar sua evolução até se tornar uma aplicação completa, seja através de uma interface gráfica ou de uma API.
 
 ---
 
 # Funcionalidades
 
-### Movimentações
-
 * Adicionar movimentações
 * Listar movimentações
 * Editar movimentações
 * Remover movimentações
-
-### Consultas
-
 * Mostrar saldo atual
 * Filtrar movimentações por categoria
 * Filtrar movimentações por data
-
-### Relatórios e Análises
-
-* Relatório financeiro consolidado
-* Total de entradas
-* Total de saídas
-* Saldo final
-* Maior entrada registrada
-* Maior saída registrada
-* Agrupamento de gastos por categoria
-* Agrupamento de ganhos por categoria
-* Categoria com maior gasto
-* Categoria com maior receita
-
-### Persistência de Dados
-
+* Gerar relatório financeiro
+* Identificar maior entrada e maior saída
+* Identificar categorias com maiores receitas e despesas
+* Consultar histórico mensal
+* Exportar dados para CSV
 * Salvamento automático em JSON
-* Carregamento automático ao iniciar o sistema
+* Carregamento automático dos dados ao iniciar o sistema
+
+---
+
+# Estrutura do Projeto
+
+```text
+controle-financeiro/
+│
+├── main.py
+├── models.py
+├── crud.py
+├── persistencia.py
+├── relatorios.py
+└── utils.py
+```
+
+### Responsabilidade de cada módulo
+
+* **main.py** → Inicialização do sistema e controle do menu principal.
+* **models.py** → Classe responsável pelas movimentações financeiras.
+* **crud.py** → Operações de cadastro, edição, listagem e remoção.
+* **persistencia.py** → Salvamento, carregamento e exportação de dados.
+* **relatorios.py** → Geração e análise dos relatórios financeiros.
+* **utils.py** → Funções auxiliares e reutilizáveis do sistema.
 
 ---
 
@@ -47,49 +55,79 @@ O objetivo futuro é transformar a aplicação em uma API e posteriormente em um
 
 * Python
 * JSON
+* CSV
 * Programação Orientada a Objetos (POO)
+* Modularização de Código
 
 ---
 
-# Conceitos Praticados
+# O que pratiquei nesse projeto
 
-Durante o desenvolvimento deste projeto foram aplicados conceitos como:
+Durante o desenvolvimento deste sistema, pratiquei conceitos importantes como:
 
 * Estruturas de repetição
-* Estruturas condicionais
+* Condicionais
 * Funções
 * Classes e Objetos
-* Dicionários
-* Manipulação de arquivos
+* Programação Orientada a Objetos (POO)
+* Modularização
 * Persistência de dados
-* Tratamento de exceções
+* Manipulação de arquivos JSON
+* Manipulação de arquivos CSV
+* Estruturas de dados (listas e dicionários)
 * Organização e refatoração de código
-* Estruturas de dados para geração de relatórios
-* Análise e agrupamento de informações
+* Separação de responsabilidades
+* Arquitetura de aplicações em Python
+
+---
+
+# Relatórios Financeiros
+
+O sistema é capaz de gerar análises sobre os dados cadastrados, apresentando:
+
+* Total de entradas
+* Total de saídas
+* Saldo final
+* Maior entrada registrada
+* Maior saída registrada
+* Categoria que mais recebeu dinheiro
+* Categoria com maior gasto
+* Total movimentado por categoria
 
 ---
 
 # Objetivo do Projeto
 
-Além de praticar fundamentos da programação, o projeto busca simular situações encontradas em aplicações reais, focando em:
-
-* Organização de código
-* Evolução incremental de funcionalidades
-* Persistência de dados
-* Geração de relatórios
-* Tratamento de informações financeiras
+Além de praticar a estrutura da programação, o objetivo deste projeto foi simular um sistema mais próximo de aplicações reais, focando não apenas em fazer funcionar, mas também em organização, clareza, manutenção e evolução do código.
 
 ---
 
-# Próximas Melhorias
+# Evolução do Projeto
 
-* Exportação de relatórios para CSV
-* Separação do projeto em múltiplos arquivos
-* Melhorias visuais no terminal
-* Geração de gráficos financeiros
-* IDs automáticos para movimentações
-* Conversão para API com Flask
-* Integração com banco de dados SQL
+### v1.0
+
+* CRUD financeiro básico.
+* Persistência em JSON.
+
+### v1.1
+
+* Relatórios financeiros.
+* Histórico mensal.
+* Exportação para CSV.
+
+### v1.2
+
+* Modularização do sistema.
+* Separação em múltiplos arquivos.
+* Organização da arquitetura do projeto.
+
+### Próxima Versão (Planejada)
+
+* Interface gráfica.
+* API com Flask.
+* Banco de dados.
+* Dashboard financeiro.
+* Sistema de usuários.
 
 ---
 
@@ -98,16 +136,16 @@ Além de praticar fundamentos da programação, o projeto busca simular situaç�
 Clone o repositório:
 
 ```bash
-git clone https://github.com/zTHIAGOz/OrganizacaoFinanceiraPython.git
+git clone LINK_DO_REPOSITORIO
 ```
 
-Acesse a pasta do projeto:
+Acesse a pasta:
 
 ```bash
-cd OrganizacaoFinanceiraPython
+cd controle-financeiro
 ```
 
-Execute o programa:
+Execute o projeto:
 
 ```bash
 python main.py
@@ -115,6 +153,17 @@ python main.py
 
 ---
 
-## Autor
+# Próximas Melhorias
 
-Desenvolvido por **Thiago Figueiredo**.
+* Interface gráfica com Tkinter ou CustomTkinter
+* API REST com Flask
+* Banco de dados SQLite/PostgreSQL
+* Dashboard financeiro
+* Sistema de autenticação
+* Testes automatizados
+* Geração de gráficos e indicadores financeiros
+
+---
+
+Desenvolvido por Thiago Figueiredo 🚀
+
