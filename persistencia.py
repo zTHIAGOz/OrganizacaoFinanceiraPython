@@ -8,7 +8,7 @@ def salvarJson(lista):
     listaJson = []
     for movimentacao in lista:
         listaJson.append(movimentacao.conversao())
-    with open (nomeArquivo(), "w") as arquivo : #abri dados.json em modo escrita e chamar ele de arquivo (o w é de write)
+    with open (nomeArquivo(), "w", encoding="utf-8") as arquivo : #abri dados.json em modo escrita e chamar ele de arquivo (o w é de write)
         json.dump( #escreva a listajson dentro do arquivo (codigo abaixo)
             listaJson,
             arquivo,
@@ -17,7 +17,7 @@ def salvarJson(lista):
 
 def carregarJson(lista):
     try:
-        with open (nomeArquivo(), "r") as arquivo: #abrir dadosjson(é o arquivo) em modo leitura e chamar ele de arquivo (o r é de read)
+        with open (nomeArquivo(), "r", encoding="utf-8") as arquivo: #abrir dadosjson(é o arquivo) em modo leitura e chamar ele de arquivo (o r é de read)
             dados = json.load(arquivo) #carrega os dados em modo lista de dicionario 
             for item in dados: #percorre cada item do dicionario
                 movimentacao = Objetos(
@@ -40,7 +40,7 @@ def consultaMensal():
     mes = input("Digite o mês de consulta: (ano/mes - '2026-05' por exemplo) ").strip()
     arquivoConsulta = mes + ".json"
     try:
-        with open (arquivoConsulta, "r") as arquivo:
+        with open (arquivoConsulta, "r", encoding="utf-8") as arquivo:
             dados = json.load(arquivo)
             for item in dados:
                 valorFormatado = formatarMoeda(item["valor"])
@@ -50,7 +50,7 @@ def consultaMensal():
             print("Nenhum registro encontrado!")
 
 def exportarCSV(lista):
-        with open ("relatorio.csv", "w") as arquivo:
+        with open ("relatorio.csv", "w", encoding="utf-8") as arquivo:
             arquivo.write("Nome, Valor, Tipo, Data, Categoria\n")
             for movimentacao in lista:
                 arquivo.write(f"{movimentacao.nome},"
