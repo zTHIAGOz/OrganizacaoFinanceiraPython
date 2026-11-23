@@ -1,10 +1,10 @@
-from utils import (entrada,validacaoTipo, escolherData, formatarMoeda)
+from utils import (entrada, entradaFloat, validacaoTipo, escolherData, formatarMoeda)
 from models import (Objetos)
 from persistencia import (salvarJson)
 
 
 def adicionar(lista):
-    nome = entrada("Nome da movimentação: ")
+    nome = entradaFloat("Nome da movimentação: ")
     valor = float(entrada("Valor da movimentação: "))
     tipo = validacaoTipo("Qual o tipo da movimentação (entrada/saida): ")
     data = escolherData()
@@ -56,7 +56,7 @@ def editar(lista):
     for movimentacao in lista:
         if edicao.lower() == movimentacao.nome.lower():
             novoNome = entrada("Qual o novo nome: ")
-            novoValor = float(entrada("Qual o novo valor: "))
+            novoValor = entradaFloat("Qual o novo valor: ")
             novoTipo = validacaoTipo("Qual  o novo tipo: ")
             novaData = entrada("Qual a nova data: ")
             novaCategoria = entrada("Qual a nova categoria: ")
