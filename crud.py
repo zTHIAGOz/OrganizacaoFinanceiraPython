@@ -12,7 +12,7 @@ def adicionar(lista):
     movimentacao = Objetos(nome, valor, tipo, data, categoria)
     lista.append(movimentacao)
     print("Movimentação cadastrada com sucesso!")
-    salvarJson()
+    salvarJson(lista)
 
 def listar(lista):
     print("\nMovimentações cadastradas:\n")
@@ -67,7 +67,7 @@ def editar(lista):
             movimentacao.categoria = novaCategoria
             encontrar = True
             print("Editada com sucesso!")
-            salvarJson()
+            salvarJson(lista)
     if encontrar == False:
         print("Movimentação não encontrada!")
 
@@ -78,7 +78,7 @@ def remover (lista):
         if removendo.lower() == movimentacao.nome.lower():
             lista.remove(movimentacao)
             print("Movimentação removida com sucesso!")
-            salvarJson()
+            salvarJson(lista)
             encontrar = True
             break
     if encontrar == False:
