@@ -57,7 +57,7 @@ while True:
         mostrarRelatório(lista)
 
     elif opcao == "9":
-        consultaMensal(lista)
+        consultaMensal()
 
     elif opcao == "10":
         exportarCSV(lista)
