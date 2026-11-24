@@ -1,3 +1,4 @@
+"""
 import datetime
 import json
 from utils import formatarMoeda
@@ -59,3 +60,113 @@ def exportarCSV(lista):
                               f"{movimentacao.data},"
                               f"{movimentacao.categoria}\n")
     
+"""
+import sqlite3
+from models import Objetos
+
+def criarTabela():
+    conexao = sqlite3.connect("financeiro.db")
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS movimentacoes(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome  TEXT NOT NULL,
+            valor REAL NOT NULL,
+            tipo TEXT NOT NULL,
+            data TEXT NOT NULL,
+            categoria TEXT NOT NULL)
+    """)
+
+    conexao.commit()
+    conexao.close()
+
+def inserirMovimentacao (movimentacao):
+    conexao = sqlite3.connect("financeiro.db")
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        INSERT INTO movimentacoes(nome, valor, tipo, data, categoria)
+        VALUES(?,?,?,?,?)
+        """, (
+            movimentacao.nome,
+            movimentacao.valor,
+            movimentacao.tipo,
+            movimentacao.data,
+            movimentacao.categoria
+        ))
+    conexao.commit()
+    conexao.close()
+
+
+def listarMovimentacoes():
+    conexao = sqlite3.connect("financeiro.db")
+    cursor =  conexao.cursor()
+
+    cursor.execute("""
+    SELECT id, nome, valor, tipo, data, categoria
+    FROM movimentacoes
+    """)
+
+    Linhas = cursor.fetchall()
+    conexao.close()
+
+    Lista = []
+    for linha in Linhas:
+        movimentacao = Objetos(
+            nome = linha [1],
+            valor = linha [2],
+            tipo = linha [3],
+            data = linha [4],
+            categoria = linha [5],
+            id = linha[0]
+        )
+        Lista.append(movimentacao)
+    return Lista
+
+
+movimentacoes = listarMovimentacoes()
+
+for item in movimentacoes:
+    print(f"ID: {item.id} | ", end="")
+    item.mostrarResultado()
+
+def atualizarMovimentacao(movimentacao):
+    conexao = sqlite3.connect("financeiro.db")
+    cursor  = conexao.cursor()
+
+    cursor.execute("""
+    UPDATE movimentacoes
+    SET nome = ?, valor = ?, tipo = ?, data = ?, categoria = ?
+    WHERE id - ?
+     """, (
+         movimentacao.nome,
+         movimentacao.valor,
+         movimentacao.tipo,
+         movimentacao.data,
+         movimentacao.categoria,
+         movimentacao.id,
+     ) )
+    conexao.commit()
+    conexao.close()
+
+def deletarMovimentacao(idMovimentacao):
+    conexao = sqlite3.connect("finenceiro.db")
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+    DELETE FROM movimentacoes
+    WHERE id = ?
+    """, (idMovimentacao,))
+
+    conexao.commit()
+    conexao.close()
+
+criarTabela()
+
+itemEditado = Objetos("Almoço executivo", 32.00, "saida", "24/11/2026","Alimentacao", id=1 )
+atualizarMovimentacao(itemEditado)
+
+for item in listarMovimentacoes():
+    print(f"ID: {item.id}", end="")
+    item.mostrarResultado()

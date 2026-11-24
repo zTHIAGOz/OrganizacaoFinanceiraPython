@@ -2,7 +2,8 @@ from utils import (formatarMoeda)
 
 class Objetos:
 
-    def __init__(self, nome, valor, tipo, data, categoria):
+    def __init__(self, nome, valor, tipo, data, categoria, id = None):
+        self.id = id
         self.nome = nome
         self.valor = valor
         self.tipo = tipo
