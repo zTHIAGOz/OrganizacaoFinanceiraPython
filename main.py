@@ -1,8 +1,10 @@
 from utils import (cabecalho)
-from persistencia import(carregarJson, consultaMensal, exportarCSV)
-from models import (Objetos)
+from persistencia import(criarTabela, listarMovimentacoes, consultaMensal, exportarCSV)
 from relatorios import (mostrarRelatório)
 from crud import (adicionar, listar, mostrarSaldo, filtrarCategoria, filtrarData, editar, remover)
+
+criarTabela()
+lista = listaMovimentacoes()
 
 def menu():
     print(

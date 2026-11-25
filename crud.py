@@ -1,18 +1,22 @@
 from utils import (entrada, entradaFloat, validacaoTipo, escolherData, formatarMoeda)
 from models import (Objetos)
-from persistencia import (salvarJson)
+from persistencia import (inserirMovimentacao, listarMovimentacoes, atualizarMovimentacao, deletarMovimentacao)
 
 
 def adicionar(lista):
-    nome = entradaFloat("Nome da movimentação: ")
-    valor = float(entrada("Valor da movimentação: "))
+    nome = entrada("Nome da movimentação: ")
+    valor = entradaFloat("Valor da movimentação: ")
     tipo = validacaoTipo("Qual o tipo da movimentação (entrada/saida): ")
     data = escolherData()
-    categoria = entrada ("Digite a categoria: ")
+    categoria = entrada("Digite a categoria: ")
+    
     movimentacao = Objetos(nome, valor, tipo, data, categoria)
-    lista.append(movimentacao)
+    inserirMovimentacao(movimentacao)
+    
+    
+    lista.clear()
+    lista.extend(listarMovimentacoes())
     print("Movimentação cadastrada com sucesso!")
-    salvarJson(lista)
 
 def listar(lista):
     print("\nMovimentações cadastradas:\n")
@@ -37,7 +41,7 @@ def filtrarCategoria(lista):
             movimentacao.mostrarResultado()
             encontrar = True
             
-    if encontrar == False:
+    if not encontrar:
         print("Categoria não encontrada!")
 
 def filtrarData(lista):
@@ -47,39 +51,44 @@ def filtrarData(lista):
         if filtroData == u.data:
             u.mostrarResultado()
             encontrar = True
-    if encontrar == False:
+    if not encontrar:
         print("Data não encontrada")
 
 def editar(lista):
-    encontrar = False
-    edicao = input("Qual movimentação deseja editar: ")
-    for movimentacao in lista:
-        if edicao.lower() == movimentacao.nome.lower():
-            novoNome = entrada("Qual o novo nome: ")
-            novoValor = entradaFloat("Qual o novo valor: ")
-            novoTipo = validacaoTipo("Qual  o novo tipo: ")
-            novaData = entrada("Qual a nova data: ")
-            novaCategoria = entrada("Qual a nova categoria: ")
-            movimentacao.nome = novoNome
-            movimentacao.valor = novoValor
-            movimentacao.tipo = novoTipo
-            movimentacao.data = novaData
-            movimentacao.categoria = novaCategoria
-            encontrar = True
-            print("Editada com sucesso!")
-            salvarJson(lista)
-    if encontrar == False:
-        print("Movimentação não encontrada!")
+    listar(lista)
+    try:
+        idEscolhido = int(input("\nDigite o ID da movimentação que deseja editar: "))
+    except ValueError:
+        print("ID inválido! Digite apenas o número.")
+        return
 
-def remover (lista):
-    encontrar = False
-    removendo = input("Qual movimentação deseja remover: ")
-    for movimentacao in lista: 
-        if removendo.lower() == movimentacao.nome.lower():
+    for movimentacao in lista:
+        if movimentacao.id == idEscolhido:
+            movimentacao.nome = entrada("Qual o novo nome: ")
+            movimentacao.valor = entradaFloat("Qual o novo valor: ")
+            movimentacao.tipo = validacaoTipo("Qual o novo tipo (entrada/saida): ")
+            movimentacao.data = entrada("Qual a nova data (dd/mm/aaaa): ")
+            movimentacao.categoria = entrada("Qual a nova categoria: ")
+            
+            atualizarMovimentacao(movimentacao)
+            print("Editada com sucesso!")
+            return
+            
+    print("ID não encontrado!")
+
+def remover(lista):
+    listar(lista)
+    try:
+        idEscolhido = int(input("\nDigite o ID da movimentação que deseja remover: "))
+    except ValueError:
+        print("ID inválido! Digite apenas o número.")
+        return
+
+    for movimentacao in lista:
+        if movimentacao.id == idEscolhido:
+            deletarMovimentacao(idEscolhido)
             lista.remove(movimentacao)
             print("Movimentação removida com sucesso!")
-            salvarJson(lista)
-            encontrar = True
-            break
-    if encontrar == False:
-        print("Movimentação não encontrada")
+            return
+            
+    print("ID não encontrado!")

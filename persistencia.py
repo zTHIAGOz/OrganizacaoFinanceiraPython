@@ -63,6 +63,7 @@ def exportarCSV(lista):
 """
 import sqlite3
 from models import Objetos
+from utils import formatarMoeda
 
 def criarTabela():
     conexao = sqlite3.connect("financeiro.db")
@@ -124,13 +125,6 @@ def listarMovimentacoes():
         Lista.append(movimentacao)
     return Lista
 
-
-movimentacoes = listarMovimentacoes()
-
-for item in movimentacoes:
-    print(f"ID: {item.id} | ", end="")
-    item.mostrarResultado()
-
 def atualizarMovimentacao(movimentacao):
     conexao = sqlite3.connect("financeiro.db")
     cursor  = conexao.cursor()
@@ -138,7 +132,7 @@ def atualizarMovimentacao(movimentacao):
     cursor.execute("""
     UPDATE movimentacoes
     SET nome = ?, valor = ?, tipo = ?, data = ?, categoria = ?
-    WHERE id - ?
+    WHERE id = ?
      """, (
          movimentacao.nome,
          movimentacao.valor,
@@ -162,11 +156,39 @@ def deletarMovimentacao(idMovimentacao):
     conexao.commit()
     conexao.close()
 
-criarTabela()
+def consultaMensal(): 
+    mesAno = input("Digite o mês e ano de consulta (ex: '11/2026':)").strip()
+    conexao = sqlite3.connect("financeiro.db")
+    cursor = conexao.cursor()
 
-itemEditado = Objetos("Almoço executivo", 32.00, "saida", "24/11/2026","Alimentacao", id=1 )
-atualizarMovimentacao(itemEditado)
+    cursor.execute("""
+        SELECT id, nome, valor, tipo, data, categoria
+        FROM movimentacoes
+        WHERE data LIKE ?
+        """, (f"%/{mesAno}",))
 
-for item in listarMovimentacoes():
-    print(f"ID: {item.id}", end="")
-    item.mostrarResultado()
+    linhas = cursor.fetchall()
+    conexao.close()
+
+    if not linhas:
+        print ("Nenhum registro encontrado para esse mês!")
+        return
+
+    for linha in linhas:
+        valorFormatado = formatarMoeda(Linha[2])
+        print(f"[ID: {linha[0]}] {linha[1]} - R${valorFormatado} - {linha[4]} - {linha[5]}")
+
+def exportarCSV(lista):
+        with open("relatorio.csv", "w", encoding="utf-8") as arquivo:
+            arquivo.write("ID, Nome, Valor, Tipo, Data, Categoria\n")
+            for movimentacao in lista:
+                arquivo.write(
+                    f"{movimentacao.id},"
+                    f"{movimentacao.nome},"
+                    f"{movimentacao.valor},"
+                    f"{movimentacao.tipo},"
+                    f"{movimentacao.data},"
+                    f"{movimentacao.categoria},\n"
+                )
+        print("Arquivo relatorio.csv exportado com sucesso!")
+            

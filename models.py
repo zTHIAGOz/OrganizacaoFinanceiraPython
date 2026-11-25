@@ -13,12 +13,12 @@ class Objetos:
     def mostrarResultado(self):
         valorFormatado = formatarMoeda(self.valor)
         if self.tipo.lower() == "entrada":
-            print(f"{self.nome} - +R${valorFormatado} - {self.data} - {self.categoria}")
+            print(f"[ID: {self.id}] {self.nome} - +R${valorFormatado} - {self.data} - {self.categoria}")
         elif self.tipo.lower() == "saida":
-            print(f"{self.nome} - -R${valorFormatado} - {self.data} - {self.categoria}")
+            print(f"[ID: {self.id}] {self.nome} - -R${valorFormatado} - {self.data} - {self.categoria}")
         else:
-            print(f"{self.nome} - R${valorFormatado} - {self.data} - {self.categoria}")
-
+            print(f"[ID: {self.id}] {self.nome} - R${valorFormatado} - {self.data} - {self.categoria}")
+            
     def conversao(self):
         return {
         "nome" : self.nome,
