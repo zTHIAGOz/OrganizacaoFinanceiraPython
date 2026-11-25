@@ -13,15 +13,19 @@ def adicionar(lista):
     movimentacao = Objetos(nome, valor, tipo, data, categoria)
     inserirMovimentacao(movimentacao)
     
-    
     lista.clear()
     lista.extend(listarMovimentacoes())
     print("Movimentação cadastrada com sucesso!")
 
+
 def listar(lista):
+    if not lista:
+        print("\nNenhuma movimentação cadastrada.")
+        return
     print("\nMovimentações cadastradas:\n")
     for movimentacao in lista:
         movimentacao.mostrarResultado()
+
 
 def mostrarSaldo(lista):
     saldoTotal = 0
@@ -33,9 +37,13 @@ def mostrarSaldo(lista):
     saldoFormatado = formatarMoeda(saldoTotal)
     print(f"\nSaldo atual: R${saldoFormatado}")
 
+
 def filtrarCategoria(lista):
+    if not lista:
+        print("\nNenhuma movimentação cadastrada.")
+        return
     encontrar = False
-    categoria = input("Qual categoria deseja acessar:")
+    categoria = input("Qual categoria deseja acessar: ").strip()
     for movimentacao in lista:
         if categoria.lower() == movimentacao.categoria.lower():
             movimentacao.mostrarResultado()
@@ -44,17 +52,25 @@ def filtrarCategoria(lista):
     if not encontrar:
         print("Categoria não encontrada!")
 
+
 def filtrarData(lista):
+    if not lista:
+        print("\nNenhuma movimentação cadastrada.")
+        return
     encontrar = False
-    filtroData = input("Qual data deseja acessar:")
+    filtroData = input("Qual data deseja acessar (dd/mm/aaaa): ").strip()
     for u in lista:
         if filtroData == u.data:
             u.mostrarResultado()
             encontrar = True
     if not encontrar:
-        print("Data não encontrada")
+        print("Data não encontrada!")
+
 
 def editar(lista):
+    if not lista:
+        print("\nNenhuma movimentação cadastrada.")
+        return
     listar(lista)
     try:
         idEscolhido = int(input("\nDigite o ID da movimentação que deseja editar: "))
@@ -76,7 +92,11 @@ def editar(lista):
             
     print("ID não encontrado!")
 
+
 def remover(lista):
+    if not lista:
+        print("\nNenhuma movimentação cadastrada.")
+        return
     listar(lista)
     try:
         idEscolhido = int(input("\nDigite o ID da movimentação que deseja remover: "))

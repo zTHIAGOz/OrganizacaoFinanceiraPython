@@ -1,10 +1,11 @@
 from utils import (cabecalho)
-from persistencia import(criarTabela, listarMovimentacoes, consultaMensal, exportarCSV)
+from persistencia import (criarTabela, listarMovimentacoes, consultaMensal, exportarCSV)
 from relatorios import (mostrarRelatório)
 from crud import (adicionar, listar, mostrarSaldo, filtrarCategoria, filtrarData, editar, remover)
 
 criarTabela()
 lista = listarMovimentacoes()
+
 
 def menu():
     print(
@@ -19,29 +20,23 @@ def menu():
         "\n9 - Consultar histórico mensal"
         "\n10 - Exportar arquivo CSV"
         "\n11 - Sair\n"
-
-        
     )
-            
-lista = []
 
 
 while True:
-
     cabecalho()
-
     menu()
-    opcao = input("Escolha uma opção: ")
-    
+    opcao = input("Escolha uma opção: ").strip()
+
     if opcao == "1":
         adicionar(lista)
-    
+
     elif opcao == "2":
         listar(lista)
-    
+
     elif opcao == "3":
         mostrarSaldo(lista)
-    
+
     elif opcao == "4":
         filtrarCategoria(lista)
 
@@ -50,10 +45,10 @@ while True:
 
     elif opcao == "6":
         editar(lista)
-        
+
     elif opcao == "7":
         remover(lista)
-        
+
     elif opcao == "8":
         mostrarRelatório(lista)
 

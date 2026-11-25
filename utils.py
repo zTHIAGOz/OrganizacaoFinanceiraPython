@@ -8,9 +8,21 @@ def cabecalho():
 def entrada(texto):
     valor = input(texto).strip()
     while not valor:
-        print ("Digite uma opção válida! ")
+        print("Digite uma opção válida!")
         valor = input(texto).strip()
     return valor
+
+def entradaFloat(texto):
+    while True:
+        valorTexto = input(texto).strip().replace(",", ".")
+        try:
+            valor = float(valorTexto)
+            if valor <= 0:
+                print("Digite um valor maior que zero!")
+                continue
+            return valor
+        except ValueError:
+            print("Valor inválido! Digite apenas números (ex: 50.90 ou 50,90).")
 
 def validacaoTipo(texto):
     valorTipo = input(texto).strip().lower()
@@ -20,20 +32,6 @@ def validacaoTipo(texto):
         valorTipo = input(texto).strip().lower()
 
     return valorTipo
-
-def entradaFloat(): 
-    while True: 
-        valorTexto: input (texto).strip().replace(",",".")
-        try:
-            valor = float(valorTexto)
-            if valor <= 0:
-                print("Digite um valor maior que zero!")
-                continue
-            return valor
-        except ValueError: 
-            print("Valor inválido! Digite apenas números(ex: 50.90 ou 54.65)")
-            
-    
 
 def escolherData():
     data = datetime.datetime.now()

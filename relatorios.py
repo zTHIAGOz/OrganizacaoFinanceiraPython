@@ -143,7 +143,10 @@ def mostrarRelatório(lista):
     print("Gastos por Categoria")
     print("="*15)
 
-    for categoria in gastosCategoria:
+    if not gastosCategoria:
+         print("Nenhum gasto registrado.\n")
+    else:
+         for categoria in gastosCategoria:
             valorFormatadoSaidas = formatarMoeda(gastosCategoria[categoria])
             print(f"{categoria}: R${valorFormatadoSaidas}")
             print()
@@ -152,8 +155,11 @@ def mostrarRelatório(lista):
     print("Entradas por Categoria")
     print("="*15)
 
-    for categoria in entradasCategoria:
-        valorFormatadoEntradas = formatarMoeda(entradasCategoria[categoria])
-        print(f"{categoria}: R${valorFormatadoEntradas}")
-        print()
+    if not entradasCategoria:
+        print("Nenhuma entrada registrada.\n")
+    else:
+        for categoria in entradasCategoria:
+            valorFormatadoEntradas = formatarMoeda(entradasCategoria[categoria])
+            print(f"{categoria}: R${valorFormatadoEntradas}")
+            print()
 
