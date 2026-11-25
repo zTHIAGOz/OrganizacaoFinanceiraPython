@@ -4,7 +4,7 @@ from relatorios import (mostrarRelatório)
 from crud import (adicionar, listar, mostrarSaldo, filtrarCategoria, filtrarData, editar, remover)
 
 criarTabela()
-lista = listaMovimentacoes()
+lista = listarMovimentacoes()
 
 def menu():
     print(
@@ -24,7 +24,6 @@ def menu():
     )
             
 lista = []
-carregarJson(lista)
 
 
 while True:

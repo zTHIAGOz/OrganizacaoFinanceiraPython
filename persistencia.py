@@ -175,7 +175,7 @@ def consultaMensal():
         return
 
     for linha in linhas:
-        valorFormatado = formatarMoeda(Linha[2])
+        valorFormatado = formatarMoeda(linha[2])
         print(f"[ID: {linha[0]}] {linha[1]} - R${valorFormatado} - {linha[4]} - {linha[5]}")
 
 def exportarCSV(lista):
